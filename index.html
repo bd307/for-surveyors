@@ -67,12 +67,18 @@
   <style>
     /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
     body {
       font-family: 'Inter', sans-serif;
       color: #1a2332;
       background: #fff;
       line-height: 1.6;
+      overflow-x: hidden;
+      /* Remove inner scrollbar when embedded in Wix iframe */
+      overflow-y: visible;
     }
 
     /* ===== COLOR SYSTEM ===== */
@@ -1403,5 +1409,19 @@
     </div>
   </footer>
 
+  <!-- Wix iframe auto-resize: sends full page height to parent so Wix expands the iframe
+       to match content height, eliminating the double scrollbar -->
+  <script>
+    function sendHeightToParent() {
+      var height = document.documentElement.scrollHeight || document.body.scrollHeight;
+      window.parent.postMessage({ type: 'wix-iframe-height', height: height }, '*');
+    }
+    // Send on load
+    window.addEventListener('load', sendHeightToParent);
+    // Send on resize (handles mobile orientation changes)
+    window.addEventListener('resize', sendHeightToParent);
+    // Send periodically for dynamic content
+    setInterval(sendHeightToParent, 500);
+  </script>
 </body>
 </html>
