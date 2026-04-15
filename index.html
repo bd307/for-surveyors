@@ -69,16 +69,25 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html {
       scroll-behavior: smooth;
-      overflow-x: hidden;
+      overflow: hidden;  /* Hide ALL scrollbars on the iframe document */
+      height: auto;
     }
     body {
       font-family: 'Inter', sans-serif;
       color: #1a2332;
       background: #fff;
       line-height: 1.6;
-      overflow-x: hidden;
-      /* Remove inner scrollbar when embedded in Wix iframe */
-      overflow-y: visible;
+      overflow: hidden;  /* Hide ALL scrollbars — Wix page handles scrolling */
+      height: auto;
+      /* Hide webkit scrollbars (Chrome, Safari) */
+      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;  /* IE/Edge */
+    }
+    body::-webkit-scrollbar {
+      display: none;  /* Chrome, Safari, Opera */
+    }
+    html::-webkit-scrollbar {
+      display: none;
     }
 
     /* ===== COLOR SYSTEM ===== */
@@ -1409,19 +1418,47 @@
     </div>
   </footer>
 
-  <!-- Wix iframe auto-resize: sends full page height to parent so Wix expands the iframe
-       to match content height, eliminating the double scrollbar -->
+  <!-- iframe auto-resize: expands document to full content height so no inner scrollbar appears -->
   <script>
-    function sendHeightToParent() {
-      var height = document.documentElement.scrollHeight || document.body.scrollHeight;
-      window.parent.postMessage({ type: 'wix-iframe-height', height: height }, '*');
-    }
-    // Send on load
-    window.addEventListener('load', sendHeightToParent);
-    // Send on resize (handles mobile orientation changes)
-    window.addEventListener('resize', sendHeightToParent);
-    // Send periodically for dynamic content
-    setInterval(sendHeightToParent, 500);
+    (function() {
+      function getFullHeight() {
+        // Get the tallest measurement to ensure we capture full content
+        return Math.max(
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight,
+          document.documentElement.clientHeight
+        );
+      }
+
+      function resizeDocument() {
+        var h = getFullHeight();
+        // Set explicit height on html and body to full content height
+        document.documentElement.style.height = h + 'px';
+        document.body.style.height = h + 'px';
+        // Also notify Wix parent frame of the height
+        try {
+          window.parent.postMessage({ type: 'wix-iframe-height', height: h }, '*');
+          // Wix HTML Component specific message format
+          window.parent.postMessage(JSON.stringify({ intent: 'heightChanged', height: h }), '*');
+        } catch(e) {}
+      }
+
+      // Run on load
+      window.addEventListener('load', function() {
+        resizeDocument();
+        // Run again after images/fonts load
+        setTimeout(resizeDocument, 500);
+        setTimeout(resizeDocument, 1500);
+      });
+
+      // Run on resize
+      window.addEventListener('resize', resizeDocument);
+
+      // Run periodically to catch any dynamic content changes
+      setInterval(resizeDocument, 1000);
+    })();
   </script>
 </body>
 </html>
