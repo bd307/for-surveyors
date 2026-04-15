@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CM Geodata Solutions | Aerial Data Partner for Land Surveyors</title>
+  <meta name="description" content="CM Geodata Solutions provides ASPRS-compliant aerial LiDAR, orthomosaics, DEMs, contours, and planimetrics to licensed land surveyors and civil engineering firms in Southern California. Fast turnaround. Survey-grade accuracy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1a2332;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    /* ===== COLOR SYSTEM ===== */
+    :root {
+      --navy:    #0d1f35;
+      --blue:    #1a4f8a;
+      --accent:  #f59e0b;
+      --light:   #f0f4f9;
+      --mid:     #e2eaf4;
+      --text:    #1a2332;
+      --muted:   #5a6a7e;
+      --white:   #ffffff;
+    }
+
+    /* ===== UTILITY ===== */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #e08c00; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 13px 30px;
+      border-radius: 4px;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 31, 53, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 9px 22px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #e08c00; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--navy);
+      overflow: hidden;
+      padding-top: 64px;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/surveyor_drone_field.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: 0.22;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(13,31,53,0.97) 0%, rgba(13,31,53,0.75) 60%, rgba(26,79,138,0.5) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      padding: 80px 0;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.4);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.08;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 56px; }
+    .hero-proof {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .proof-item { }
+    .proof-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .proof-label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 2px;
+    }
+
+    /* ===== TRUST BAR ===== */
+    .trust-bar {
+      background: var(--mid);
+      border-bottom: 1px solid #cdd8e8;
+      padding: 18px 0;
+    }
+    .trust-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .trust-icon {
+      width: 32px; height: 32px;
+      background: var(--blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .trust-icon svg { width: 18px; height: 18px; fill: white; }
+
+    /* ===== PROBLEM SECTION ===== */
+    .problem-section {
+      padding: 80px 0;
+      background: var(--white);
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 48px;
+    }
+    .problem-image {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(13,31,53,0.15);
+    }
+    .problem-image img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .problem-list { list-style: none; }
+    .problem-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--mid);
+      font-size: 0.97rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .problem-list li:last-child { border-bottom: none; }
+    .prob-icon {
+      width: 28px; height: 28px;
+      background: #fee2e2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .prob-icon svg { width: 14px; height: 14px; fill: #dc2626; }
+
+    /* ===== WORKFLOW SECTION ===== */
+    .workflow-section {
+      padding: 80px 0;
+      background: var(--light);
+    }
+    .workflow-header { text-align: center; margin-bottom: 56px; }
+    .workflow-header .section-sub { margin: 0 auto; }
+    .workflow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: #cdd8e8;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .workflow-step {
+      background: var(--white);
+      padding: 32px 24px;
+      position: relative;
+    }
+    .step-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--mid);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .step-tag {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(26,79,138,0.08);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    /* ===== ACCURACY SECTION ===== */
+    .accuracy-section {
+      padding: 80px 0;
+      background: var(--navy);
+      color: var(--white);
+    }
+    .accuracy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .accuracy-content .section-title { color: var(--white); }
+    .accuracy-content .section-sub { color: rgba(255,255,255,0.65); }
+    .accuracy-table {
+      margin-top: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .accuracy-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .accuracy-table th {
+      background: rgba(255,255,255,0.08);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .accuracy-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+    }
+    .accuracy-table tr:last-child td { border-bottom: none; }
+    .accuracy-table tr:hover td { background: rgba(255,255,255,0.04); }
+    .highlight-row td { color: var(--accent) !important; font-weight: 600; }
+    .accuracy-visual {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .accuracy-visual img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      opacity: 0.85;
+    }
+    .accuracy-visual-caption {
+      padding: 16px 20px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+    }
+    .asprs-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 6px;
+      padding: 12px 18px;
+      margin-top: 24px;
+    }
+    .asprs-badge-text { font-size: 0.88rem; color: rgba(255,255,255,0.8); }
+    .asprs-badge-text strong { color: var(--accent); }
+
+    /* ===== DELIVERABLES SECTION ===== */
+    .deliverables-section {
+      padding: 80px 0;
+      background: var(--white);
+    }
+    .deliverables-header { margin-bottom: 48px; }
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .deliverable-card {
+      border: 1px solid var(--mid);
+      border-radius: 8px;
+      padding: 28px 24px;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .deliverable-card:hover {
+      box-shadow: 0 8px 32px rgba(13,31,53,0.1);
+      border-color: #a0b4cc;
+      transform: translateY(-2px);
+    }
+    .deliverable-icon {
+      width: 48px; height: 48px;
+      background: var(--light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .deliverable-icon svg { width: 26px; height: 26px; fill: var(--blue); }
+    .deliverable-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .deliverable-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .deliverable-formats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .format-tag {
+      background: var(--light);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ===== TURNAROUND SECTION ===== */
+    .turnaround-section {
+      padding: 80px 0;
+      background: var(--light);
+    }
+    .turnaround-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .turnaround-visual {
+      position: relative;
+    }
+    .turnaround-image {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(13,31,53,0.12);
+    }
+    .turnaround-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+    .turnaround-callout {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: var(--accent);
+      color: var(--navy);
+      border-radius: 8px;
+      padding: 20px 24px;
+      box-shadow: 0 8px 24px rgba(245,158,11,0.4);
+    }
+    .callout-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .callout-label { font-size: 0.82rem; font-weight: 700; margin-top: 2px; }
+    .turnaround-content {}
+    .turnaround-list { list-style: none; margin-top: 28px; }
+    .turnaround-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid #cdd8e8;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .turnaround-list li:last-child { border-bottom: none; }
+    .check-icon {
+      width: 22px; height: 22px;
+      background: #dcfce7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .check-icon svg { width: 12px; height: 12px; fill: #16a34a; }
+
+    /* ===== WHO WE SERVE ===== */
+    .serve-section {
+      padding: 80px 0;
+      background: var(--white);
+    }
+    .serve-header { text-align: center; margin-bottom: 48px; }
+    .serve-header .section-sub { margin: 0 auto; }
+    .serve-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .serve-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--mid);
+    }
+    .serve-card-header {
+      background: var(--navy);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .serve-card-icon {
+      width: 44px; height: 44px;
+      background: rgba(245,158,11,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .serve-card-icon svg { width: 24px; height: 24px; fill: var(--accent); }
+    .serve-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .serve-card-body {
+      padding: 24px;
+    }
+    .serve-card-body p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .serve-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .serve-tag {
+      background: var(--light);
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* ===== PROCESS SECTION ===== */
+    .process-section {
+      padding: 80px 0;
+      background: var(--light);
+    }
+    .process-header { text-align: center; margin-bottom: 56px; }
+    .process-timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: var(--mid);
+    }
+    .process-item {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .process-item:last-child { margin-bottom: 0; }
+    .process-dot {
+      width: 58px; height: 58px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 6px var(--light);
+    }
+    .process-dot span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .process-content {
+      background: var(--white);
+      border: 1px solid var(--mid);
+      border-radius: 8px;
+      padding: 24px 28px;
+      flex: 1;
+    }
+    .process-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .process-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .process-time {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(26,79,138,0.08);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a4f8a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%);
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .cta-content .section-title { color: var(--white); }
+    .cta-content p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .cta-points { list-style: none; margin-bottom: 32px; }
+    .cta-points li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.92rem;
+      margin-bottom: 10px;
+    }
+    .cta-points li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .cta-form {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .form-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #cdd8e8;
+      border-radius: 5px;
+      font-size: 0.92rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,79,138,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-submit {
+      width: 100%;
+      background: var(--accent);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .form-submit:hover { background: #e08c00; }
+    .form-privacy {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #080f1a;
+      color: rgba(255,255,255,0.45);
+      padding: 32px 0;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    footer strong { color: rgba(255,255,255,0.7); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .problem-grid,
+      .accuracy-grid,
+      .turnaround-grid,
+      .cta-inner { grid-template-columns: 1fr; gap: 40px; }
+      .workflow-steps { grid-template-columns: 1fr 1fr; }
+      .deliverables-grid,
+      .serve-cards { grid-template-columns: 1fr 1fr; }
+      .turnaround-callout { position: static; margin-top: 16px; display: inline-block; }
+    }
+    @media (max-width: 600px) {
+      .workflow-steps,
+      .deliverables-grid,
+      .serve-cards { grid-template-columns: 1fr; }
+      .hero-proof { gap: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .trust-inner { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo"><img src="images/cm_geodata_logo.webp" alt="CM Geodata Solutions - Aerial Data Partner for Licensed Land Surveyors in Southern California" style="height: 40px; width: auto;"></a>
+      <a href="#contact" class="nav-cta">Request a Quote</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" style="background-image: url('images/hero_drones_flight.webp');" role="img" aria-label="Professional UAS aerial data acquisition for ASPRS-compliant topographic mapping and LiDAR survey services"></div>
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Aerial Data Partner for Licensed Surveyors</div>
+        <h1>Your Projects Deserve<br/><em>Faster, Proven-Accurate</em><br/>Aerial Data.</h1>
+        <p class="hero-sub">
+          We act as your invisible data subcontractor — delivering ASPRS-compliant orthomosaics, DEMs, contours, and planimetric data to licensed land surveyors and civil engineering firms. Fast turnaround. Defensible accuracy. Ready to drop into your workflow.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Request a Quote</a>
+          <a href="#workflow" class="btn-outline">See Our Workflow</a>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-item">
+            <div class="proof-num">5-Day</div>
+            <div class="proof-label">Standard Turnaround</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-num">ASPRS</div>
+            <div class="proof-label">Edition 2 (2024) Compliant</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-num">✓</div>
+            <div class="proof-label">Flexible Project Coordination</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="container trust-inner">
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2zm-1 14l-4-4 1.41-1.41L11 13.17l6.59-6.59L19 8l-8 8z"/></svg>
+        </div>
+        FAA Part 107 Certified
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+        </div>
+        ASPRS 2024 Edition 2 Standards
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        GCP-Verified Accuracy Reports
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        </div>
+        5-Business-Day Delivery
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.53 15.48 0 12.36 0c-1.7 0-3.21.74-4.27 1.9L12 6H20zm-7.64 0H6.18L3.27 2.26C2.49 3.14 2 4.29 2 5.56 2 7.97 3.97 9.94 6.36 9.94c1.17 0 2.24-.46 3.03-1.2L12 6h.36zM2 8v13h20V8H2zm11 11H9v-2h4v2zm4-4H9v-2h8v2z"/></svg>
+        </div>
+        CAD & GIS Ready Deliverables
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM SECTION -->
+  <section class="problem-section">
+    <div class="container">
+      <div class="problem-grid">
+        <div class="problem-image">
+          <img src="images/matrice_400_field.webp" alt="Professional UAS aerial data acquisition with RTK ground control for ASPRS-compliant topographic mapping and LiDAR survey subcontracting" />
+        </div>
+        <div>
+          <div class="section-label">The Challenge</div>
+          <h2 class="section-title">Topo Backlogs Are Costing You Billable Hours</h2>
+          <p class="section-sub" style="margin-bottom: 28px;">
+            Your survey crews are your most valuable asset. When they're tied up collecting topographic data on large, complex sites, your firm loses capacity for higher-margin boundary and construction work.
+          </p>
+          <ul class="problem-list">
+            <li>
+              <div class="prob-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+              <div>Large-area topographic surveys require multiple field days, pulling crews away from other projects and creating costly scheduling conflicts.</div>
+            </li>
+            <li>
+              <div class="prob-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+              <div>Equipment downtime or crew shortages can stall a project mid-flight, jeopardizing client deadlines and your firm's reputation.</div>
+            </li>
+            <li>
+              <div class="prob-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+              <div>In-house aerial data programs require significant capital investment in hardware, software, training, and FAA compliance — resources better deployed elsewhere.</div>
+            </li>
+            <li>
+              <div class="prob-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+              <div>Accepting more projects than your crews can handle means turning away revenue — or overextending your team and risking quality.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW SECTION -->
+  <section class="workflow-section" id="workflow">
+    <div class="container">
+      <div class="workflow-header">
+        <div class="section-label">Our Proven Process</div>
+        <h2 class="section-title">A Workflow Built for<br/>Surveying Professionals</h2>
+        <p class="section-sub">
+          Every project follows a disciplined, documented workflow designed to meet or exceed ASPRS positional accuracy recommendations for UAS data acquisition. We coordinate with your licensed surveyors to integrate their GCP measurements and checkpoint verification, ensuring your firm retains full control of the survey-grade validation process while we handle the aerial acquisition and processing.
+        </p>
+      </div>
+      <div class="workflow-steps">
+        <div class="workflow-step">
+          <div class="step-num">01</div>
+          <div class="step-title">Project Scoping & Control Planning</div>
+          <p class="step-desc">We review your project specs, required accuracy class, and terrain complexity. We coordinate with your team on GCP placement strategy to meet ASPRS Edition 2 (2024) control requirements. Your licensed surveyors establish and measure GCPs using RTK GNSS; we integrate those measurements into our processing workflow to ensure defensible accuracy validation.</p>
+          <span class="step-tag">Day 1</span>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">02</div>
+          <div class="step-title">Ground Control & Flight Acquisition</div>
+          <p class="step-desc">Flight parameters — altitude, overlap, GSD — are calculated to achieve your required accuracy class. We coordinate timing with your survey team to align with GCP establishment. All flights are conducted by FAA Part 107 certified operators using Matrice 400 platforms with precision sensors.</p>
+          <span class="step-tag">Day 1–2</span>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">03</div>
+          <div class="step-title">Data Processing & QA/QC</div>
+          <p class="step-desc">Raw data is processed through our professional-grade photogrammetry and LiDAR processing pipeline. We validate RMSE horizontal, RMSE NVA (Non-Vegetated Vertical Accuracy), swath-to-swath precision, and seamline mismatch against your target accuracy class.</p>
+          <span class="step-tag">Day 2–4</span>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">04</div>
+          <div class="step-title">Accuracy Report & Delivery</div>
+          <p class="step-desc">You receive a full accuracy report with RMSE statistics, checkpoint verification, and QA documentation — not just the data files. Deliverables are formatted to integrate directly with your CAD and GIS software. No reformatting. No surprises.</p>
+          <span class="step-tag">Day 5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCURACY SECTION -->
+  <section class="accuracy-section" id="accuracy">
+    <div class="container">
+      <div class="accuracy-grid">
+        <div class="accuracy-content">
+          <div class="section-label">Accuracy Standards</div>
+          <h2 class="section-title">We Don't Just Claim Accuracy.<br/>We Document It.</h2>
+          <p class="section-sub">
+            Every deliverable is validated against the ASPRS Positional Accuracy Standards for Digital Geospatial Data, Edition 2, Version 2 (2024) — the current industry benchmark for UAS, LiDAR, and photogrammetry data.
+          </p>
+          <div class="accuracy-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Accuracy Class</th>
+                  <th>RMSE Horiz.</th>
+                  <th>RMSE NVA (Vert.)</th>
+                  <th>RMSE 3D</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row">
+                  <td>2 cm ★ Typical</td>
+                  <td>2.0 cm</td>
+                  <td>2.5 cm</td>
+                  <td>3.6 cm</td>
+                </tr>
+                <tr>
+                  <td>5 cm</td>
+                  <td>5.0 cm</td>
+                  <td>6.3 cm</td>
+                  <td>9.0 cm</td>
+                </tr>
+                <tr>
+                  <td>10 cm</td>
+                  <td>10.0 cm</td>
+                  <td>12.5 cm</td>
+                  <td>18.0 cm</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="asprs-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <div class="asprs-badge-text">
+              <strong>ASPRS Edition 2, Version 2 (2024)</strong> — All projects include full RMSE documentation, checkpoint verification (min. 30 checkpoints), and swath-to-swath precision validation.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="accuracy-visual">
+            <img src="images/elevation_lidar.jpg" alt="Classified LiDAR point cloud and 3D Digital Elevation Model (DEM) with extracted utility infrastructure and planimetric features for land surveying" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERABLES SECTION -->
+  <section class="deliverables-section" id="deliverables">
+    <div class="container">
+      <div class="deliverables-header">
+        <div class="section-label">What You Receive</div>
+        <h2 class="section-title">Deliverables That Drop Directly<br/>Into Your Workflow</h2>
+        <p class="section-sub">
+          We ask about your software stack before we process a single file. Deliverables are formatted to integrate directly with AutoCAD Civil 3D, Microstation, ArcGIS, and QGIS — no reformatting, no conversion headaches.
+        </p>
+      </div>
+      <div class="deliverables-grid">
+        <div class="deliverable-card">
+          <div class="deliverable-icon">
+            <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+          </div>
+          <div class="deliverable-title">Orthomosaic (Ortho)</div>
+          <p class="deliverable-desc">Georeferenced, radiometrically balanced orthophotos with sub-5cm GSD. Ideal for planimetric mapping, feature extraction, and as-built documentation.</p>
+          <div class="deliverable-formats">
+            <span class="format-tag">GeoTIFF</span>
+            <span class="format-tag">ECW</span>
+            <span class="format-tag">MrSID</span>
+          </div>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+          </div>
+          <div class="deliverable-title">Digital Elevation Model (DEM)</div>
+          <p class="deliverable-desc">Bare-earth surface models with classified ground returns. Validated against ASPRS NVA (Non-Vegetated Vertical Accuracy) standards. Suitable for grading design and drainage analysis.</p>
+          <div class="deliverable-formats">
+            <span class="format-tag">GeoTIFF</span>
+            <span class="format-tag">ASCII Grid</span>
+            <span class="format-tag">LandXML</span>
+          </div>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          </div>
+          <div class="deliverable-title">Topographic Contours & Planimetric Features</div>
+          <p class="deliverable-desc">Smoothed, attributed contour lines at your specified interval (0.5', 1', 2'). Planimetric data includes roads, buildings, curbs, drainage structures, utilities, and vegetation boundaries — all delivered as CAD-ready vectors with proper layer structure and elevation attributes.</p>
+          <div class="deliverable-formats">
+            <span class="format-tag">DWG</span>
+            <span class="format-tag">DXF</span>
+            <span class="format-tag">SHP</span>
+          </div>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/></svg>
+          </div>
+          <div class="deliverable-title">Classified Point Cloud</div>
+          <p class="deliverable-desc">Fully classified LiDAR point cloud with ground, low/medium/high vegetation, buildings, and noise classes. Swath-to-swath precision validated per ASPRS standards.</p>
+          <div class="deliverable-formats">
+            <span class="format-tag">LAS</span>
+            <span class="format-tag">LAZ</span>
+            <span class="format-tag">E57</span>
+          </div>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </div>
+          <div class="deliverable-title">Accuracy Report</div>
+          <p class="deliverable-desc">Full QA documentation including RMSE horizontal, RMSE NVA, RMSE 3D, checkpoint statistics (min. 30 points), GCP verification, and swath-to-swath precision — formatted for your project records.</p>
+          <div class="deliverable-formats">
+            <span class="format-tag">PDF</span>
+            <span class="format-tag">CSV</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TURNAROUND SECTION -->
+  <section class="turnaround-section">
+    <div class="container">
+      <div class="turnaround-grid">
+        <div class="turnaround-visual">
+          <div class="turnaround-image">
+            <img src="images/ortho_baseball_final.png" alt="High-resolution georeferenced orthomosaic for planimetric feature extraction and fast-turnaround topographic mapping deliverables" />
+          </div>
+          <div class="turnaround-callout">
+            <div class="callout-num">5 Days</div>
+            <div class="callout-label">Standard Delivery</div>
+          </div>
+        </div>
+        <div class="turnaround-content">
+          <div class="section-label">Turnaround Time</div>
+          <h2 class="section-title">Your Client's Deadline<br/>Is Our Deadline.</h2>
+          <p class="section-sub">
+            We understand that your project schedule doesn't wait. Our streamlined acquisition and processing workflow is designed to get verified, deliverable-ready data into your hands faster than traditional methods.
+          </p>
+          <ul class="turnaround-list">
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+              <div><strong>Standard projects (up to 500 acres):</strong> 5 business days from flight completion to final deliverables.</div>
+            </li>
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+              <div><strong>Rush delivery available:</strong> 48–72 hour turnaround for urgent projects. Contact us to discuss availability.</div>
+            </li>
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+              <div><strong>Equipment failure backup:</strong> If your in-house program is grounded, we can mobilize within 24 hours to keep your project on schedule.</div>
+            </li>
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+              <div><strong>Proactive communication:</strong> You receive flight confirmation, processing status updates, and delivery notification at every stage.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO WE SERVE -->
+  <section class="serve-section">
+    <div class="container">
+      <div class="serve-header">
+        <div class="section-label">Who We Work With</div>
+          <h2 class="section-title">Built for Professionals Who<br/>Demand More From Their Data</h2>
+        <p class="section-sub">
+          We work exclusively with licensed professionals and established firms — not end-users or developers. Your reputation is on the line with every deliverable. We deliver orthomosaics, DEMs, contours, planimetric data, and point clouds that integrate seamlessly into your workflow. You retain control of the survey-grade validation and client relationship.
+        </p>
+      </div>
+      <div class="serve-cards">
+        <div class="serve-card">
+          <div class="serve-card-header">
+            <div class="serve-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="serve-card-title">Licensed Land Surveying Firms</div>
+          </div>
+          <div class="serve-card-body">
+            <p>Mid-sized PLS firms with active topographic, boundary, and ALTA survey pipelines. We act as your aerial data subcontractor — you stamp and seal the final product. We stay invisible.</p>
+            <div class="serve-tag-list">
+              <span class="serve-tag">Topo Mapping</span>
+              <span class="serve-tag">ALTA Surveys</span>
+              <span class="serve-tag">Right-of-Way</span>
+              <span class="serve-tag">Subdivision Maps</span>
+            </div>
+          </div>
+        </div>
+        <div class="serve-card">
+          <div class="serve-card-header">
+            <div class="serve-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+            </div>
+            <div class="serve-card-title">Civil Engineering & Land Development Firms</div>
+          </div>
+          <div class="serve-card-body">
+            <p>Engineering firms that need accurate topographic inputs for grading, drainage, and site design. We deliver construction-ready DEMs and contours that integrate directly with your Civil 3D workflow.</p>
+            <div class="serve-tag-list">
+              <span class="serve-tag">Grading Design</span>
+              <span class="serve-tag">Drainage Analysis</span>
+              <span class="serve-tag">Site Planning</span>
+              <span class="serve-tag">Construction Staking</span>
+            </div>
+          </div>
+        </div>
+        <div class="serve-card">
+          <div class="serve-card-header">
+            <div class="serve-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+            </div>
+            <div class="serve-card-title">Large Firms with In-House Drone Programs</div>
+          </div>
+          <div class="serve-card-body">
+            <p>When your fleet is grounded, your operators are at capacity, or a project exceeds your current coverage area — we step in as a trusted overflow partner. No onboarding friction. No learning curve.</p>
+            <div class="serve-tag-list">
+              <span class="serve-tag">Overflow Capacity</span>
+              <span class="serve-tag">Equipment Backup</span>
+              <span class="serve-tag">Surge Projects</span>
+              <span class="serve-tag">Remote Sites</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS SECTION -->
+  <section class="process-section">
+    <div class="container">
+      <div class="process-header">
+        <div class="section-label">Getting Started</div>
+        <h2 class="section-title">From First Contact to<br/>Delivered Data in 5 Steps</h2>
+      </div>
+      <div class="process-timeline">
+        <div class="process-item">
+          <div class="process-dot"><span>1</span></div>
+          <div class="process-content">
+            <div class="process-title">Submit Your Project Request</div>
+            <p class="process-desc">Fill out the form below with your project location, approximate acreage, required accuracy class, and deliverable format. We respond within 4 business hours.</p>
+            <span class="process-time">Same Day</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-dot"><span>2</span></div>
+          <div class="process-content">
+            <div class="process-title">Scope Review & Quote</div>
+            <p class="process-desc">We review your project specs, confirm the target accuracy class, and provide a fixed-price quote with a confirmed delivery date. No surprises, no scope creep.</p>
+            <span class="process-time">Within 24 Hours</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-dot"><span>3</span></div>
+          <div class="process-content">
+            <div class="process-title">GCP Coordination & Flight</div>
+            <p class="process-desc">We coordinate GCP placement with your team or establish independent control using RTK GNSS. Flight is conducted per ASPRS UAS acquisition best practices addenda.</p>
+            <span class="process-time">Day 1–2</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-dot"><span>4</span></div>
+          <div class="process-content">
+            <div class="process-title">Processing, QA/QC & Accuracy Validation</div>
+            <p class="process-desc">Data is processed through our professional pipeline. RMSE statistics, checkpoint verification, and swath-to-swath precision are validated before any file leaves our system.</p>
+            <span class="process-time">Day 2–4</span>
+          </div>
+        </div>
+        <div class="process-item">
+          <div class="process-dot"><span>5</span></div>
+          <div class="process-content">
+            <div class="process-title">Delivery & Accuracy Report</div>
+            <p class="process-desc">You receive all deliverables plus a full accuracy report via secure file transfer. We remain available for any post-delivery questions or data interpretation support.</p>
+            <span class="process-time">Day 5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-content">
+          <div class="section-label">Request a Quote</div>
+          <h2 class="section-title">Ready to Clear Your<br/>Topo Backlog?</h2>
+          <p>Tell us about your project and we'll respond within 4 business hours with a fixed-price quote and confirmed delivery date. No obligation.</p>
+          <ul class="cta-points">
+            <li>ASPRS-compliant accuracy documentation included with every project</li>
+            <li>Deliverables formatted for your specific CAD/GIS software</li>
+            <li>5-business-day standard turnaround; rush delivery available</li>
+            <li>Serving a 120-mile radius from Norco, CA</li>
+            <li>We work as your subcontractor — you retain full client relationship</li>
+          </ul>
+        </div>
+        <div class="cta-form">
+          <div class="form-title">Request a Project Quote</div>
+          <div class="form-sub">We respond within 4 business hours.</div>
+          <form id="projectForm" method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">First Name *</label>
+                <input type="text" id="fname" placeholder="John" required />
+              </div>
+              <div class="form-group">
+                <label for="lname">Last Name *</label>
+                <input type="text" id="lname" placeholder="Smith" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company">Company / Firm Name *</label>
+              <input type="text" id="company" placeholder="Smith & Associates Surveying" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Business Email *</label>
+              <input type="email" id="email" placeholder="jsmith@smithsurvey.com" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" placeholder="(951) 555-0100" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="project-type">Project Type *</label>
+                <select id="project-type" required>
+                  <option value="" disabled selected>Select type</option>
+                  <option>Topographic Mapping</option>
+                  <option>DEM / Contours</option>
+                  <option>Planimetric Mapping</option>
+                  <option>Point Cloud (LiDAR)</option>
+                  <option>Orthomosaic</option>
+                  <option>Multiple Deliverables</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="acreage">Approximate Acreage</label>
+                <input type="text" id="acreage" placeholder="e.g. 150 acres" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="notes">Project Notes / Accuracy Requirements</label>
+              <textarea id="notes" placeholder="Describe your project, required accuracy class, contour interval, coordinate system, or any special requirements..."></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Submit Project Request →</button>
+          </form>
+          <p class="form-privacy">Your information is never shared. We respond within 4 business hours on weekdays.</p>
+          <script>
+            document.getElementById('projectForm').addEventListener('submit', function(e) {
+              var submitBtn = document.getElementById('submitBtn');
+              submitBtn.disabled = true;
+              submitBtn.textContent = 'Submitting...';
+            });
+          </script>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p><strong>CM Geodata Solutions</strong> &nbsp;|&nbsp; Norco, CA &nbsp;|&nbsp; FAA Part 107 Certified</p>
+      <p style="margin-top: 8px;">© 2026 CM Geodata Solutions. All rights reserved. &nbsp;|&nbsp; ASPRS Positional Accuracy Standards, Edition 2, Version 2 (2024)</p>
+    </div>
+  </footer>
+
+</body>
+</html>
