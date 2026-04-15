@@ -1336,33 +1336,32 @@
         <div class="cta-form">
           <div class="form-title">Request a Project Quote</div>
           <div class="form-sub">We respond within 4 business hours.</div>
-          <form id="projectForm" method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
+          <form id="projectForm" method="POST" action="https://formspree.io/f/maqanryj">
             <div class="form-row">
               <div class="form-group">
                 <label for="fname">First Name *</label>
-                <input type="text" id="fname" placeholder="John" required />
+                <input type="text" id="fname" name="first_name" placeholder="John" required />
               </div>
               <div class="form-group">
                 <label for="lname">Last Name *</label>
-                <input type="text" id="lname" placeholder="Smith" required />
+                <input type="text" id="lname" name="last_name" placeholder="Smith" required />
               </div>
             </div>
             <div class="form-group">
               <label for="company">Company / Firm Name *</label>
-              <input type="text" id="company" placeholder="Smith & Associates Surveying" required />
-            </div>
+             <input type="text" id="company" name="company" placeholder="Smith &amp; Associates Surveying" required />          </div>
             <div class="form-group">
               <label for="email">Business Email *</label>
-              <input type="email" id="email" placeholder="jsmith@smithsurvey.com" required />
+              <input type="email" id="email" name="email" placeholder="jsmith@smithsurvey.com" required />
             </div>
             <div class="form-group">
               <label for="phone">Phone Number *</label>
-              <input type="tel" id="phone" placeholder="(951) 555-0100" required />
+              <input type="tel" id="phone" name="phone" placeholder="(951) 555-0100" required />
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="project-type">Project Type *</label>
-                <select id="project-type" required>
+                <select id="project-type" name="project_type" required>
                   <option value="" disabled selected>Select type</option>
                   <option>Topographic Mapping</option>
                   <option>DEM / Contours</option>
@@ -1374,12 +1373,12 @@
               </div>
               <div class="form-group">
                 <label for="acreage">Approximate Acreage</label>
-                <input type="text" id="acreage" placeholder="e.g. 150 acres" />
+                <input type="text" id="acreage" name="acreage" placeholder="e.g. 150 acres" />
               </div>
             </div>
             <div class="form-group">
               <label for="notes">Project Notes / Accuracy Requirements</label>
-              <textarea id="notes" placeholder="Describe your project, required accuracy class, contour interval, coordinate system, or any special requirements..."></textarea>
+              <textarea id="notes" name="project_notes" placeholder="Describe your project, required accuracy class, contour interval, coordinate system, or any special requirements..."></textarea>
             </div>
             <button type="submit" class="form-submit" id="submitBtn">Submit Project Request →</button>
           </form>
